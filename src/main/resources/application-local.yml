@@ -1,18 +1,11 @@
 spring:
-  profiles:
-    active: local
   security:
     user:
       name: admin
       password: $2a$10$BU2V22ofnBJgcjfOtogOjOkWxUuSnkl3oV3BKGPfup0P3YQXuTlXq
-    oauth2:
-      authorizationserver:
-        endpoint:
-          oidc:
-            logout-uri: /logout
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;mode=MySQL;
     #url: jdbc:h2:~/testdb
     username: sa
     password:
@@ -30,6 +23,11 @@ spring:
         format_sql: true
         show_sql: true
         use_sql_comments: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data/*.sql
 management:
   endpoints:
     web:

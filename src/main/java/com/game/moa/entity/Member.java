@@ -14,7 +14,8 @@ import java.util.Set;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seq", unique = true, nullable = false, updatable = false)
     private Long seq;
 
     @Column(name = "member_id", nullable = false, length = 20, unique = true, updatable = false)

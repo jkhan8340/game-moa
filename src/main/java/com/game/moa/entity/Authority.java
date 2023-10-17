@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Authority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false, unique = true, updatable = false)
     private Long seq;
 

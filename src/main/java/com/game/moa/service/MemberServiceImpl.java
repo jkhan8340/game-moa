@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -40,11 +41,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void registerMember(MemberParam memberParam) {
         String encodingPassword = passwordEncoder.encode(memberParam.getPassword());
+        Set<Authority> authorities = new HashSet<>();
         Member member = new Member(memberParam.getMemberId(),
                 memberParam.getName(),
                 memberParam.getEmail(),
-                encodingPassword,
-                Set.of(new Authority("ROLE_USER")));
+                encodingPassword, authorities);
         Member registerMember = memberRepository.save(member);
     }
 }

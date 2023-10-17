@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@TestPropertySource(value = "classpath:application-test.yml")
 class MemberServiceImplTest {
 
     @MockBean
@@ -58,7 +59,7 @@ class MemberServiceImplTest {
 
     @Test
     public void testPasswordEncoder() {
-        String password = "test";
+        String password = "1234";
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodingPassword = passwordEncoder.encode(password);
         assertThat(passwordEncoder.matches(password, encodingPassword)).isTrue();

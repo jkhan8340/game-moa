@@ -1,5 +1,6 @@
 package com.game.moa.service;
 
+import com.game.moa.config.SecurityConfig;
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.repository.MemberRepository;
@@ -7,7 +8,13 @@ import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class MemberServiceImplTest {
 
     @MockBean
@@ -50,5 +58,13 @@ class MemberServiceImplTest {
         assertThatThrownBy(() -> memberService.findMemberByMemberId("test"))
                 .isInstanceOf(GamemoaException.class)
                 .hasMessage("존재하지 않는 회원입니다.");
+    }
+
+    @Test
+    public void testPasswordEncoder() {
+        String password = "test";
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodingPassword = passwordEncoder.encode(password);
+        assertThat(passwordEncoder.matches(password, encodingPassword)).isTrue();
     }
 }

@@ -1,6 +1,5 @@
 package com.game.moa.service;
 
-import com.game.moa.config.SecurityConfig;
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.repository.MemberRepository;
@@ -8,10 +7,7 @@ import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;

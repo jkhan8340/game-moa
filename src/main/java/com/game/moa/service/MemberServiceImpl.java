@@ -1,5 +1,6 @@
 package com.game.moa.service;
 
+import com.game.moa.entity.Authority;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.MemberRepository;
@@ -8,6 +9,8 @@ import com.game.moa.entity.Member;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -37,7 +40,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void registerMember(MemberParam memberParam) {
         String encodingPassword = passwordEncoder.encode(memberParam.getPassword());
-        Member member = new Member(memberParam.getMemberId(), memberParam.getName(), memberParam.getEmail(), encodingPassword);
+        Member member = new Member(memberParam.getMemberId(),
+                memberParam.getName(),
+                memberParam.getEmail(),
+                encodingPassword,
+                Set.of(new Authority("ROLE_USER")));
         Member registerMember = memberRepository.save(member);
     }
 }

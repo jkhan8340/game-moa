@@ -1,10 +1,11 @@
 package com.game.moa.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,13 +29,23 @@ public class Member {
     @Column(name = "password", nullable = false, length = 60)
     private String password;
 
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST
+    })
+    @JoinTable(
+            name = "member_authority",
+            joinColumns = {@JoinColumn(name = "member_seq", referencedColumnName = "seq")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_seq", referencedColumnName = "seq")})
+    private Set<Authority> authorities;
+
     protected Member() {
     }
 
-    public Member (String memberId, String name, String email, String password) {
+    public Member (String memberId, String name, String email, String password, Set<Authority> authorities) {
         this.memberId = memberId;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.authorities = authorities;
     }
 }

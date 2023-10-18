@@ -3,14 +3,15 @@ package com.game.moa.service;
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.repository.MemberRepository;
+import com.game.moa.util.Base64Utils;
 import com.game.moa.vo.MemberVO;
+import org.apache.logging.log4j.util.Base64Util;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 @SpringBootTest
 @TestPropertySource(value = "classpath:application-test.yml")

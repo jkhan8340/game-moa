@@ -8,5 +8,5 @@ public interface MemberService {
 
     MemberVO findMemberByMemberId(String memberId);
 
-    void registerMember(MemberParam memberParam);
+    MemberVO registerMember(MemberParam memberParam);
 }

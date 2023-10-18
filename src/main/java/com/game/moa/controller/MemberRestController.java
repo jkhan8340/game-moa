@@ -1,10 +1,12 @@
 package com.game.moa.controller;
 
 import com.game.moa.param.MemberParam;
+import com.game.moa.response.GamemoaResponse;
 import com.game.moa.service.MemberService;
 import com.game.moa.vo.MemberVO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,15 +20,15 @@ public class MemberRestController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberVO> getMember(@RequestParam("member_id") String memberId) {
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<GamemoaResponse<MemberVO>> getMember(@RequestParam("member_id") String memberId) {
         return ResponseEntity
-                .ok(this.memberService.findMemberByMemberId(memberId));
+                .ok(GamemoaResponse.from(memberService.findMemberByMemberId(memberId), "success", 200));
     }
 
     @PutMapping
-    public ResponseEntity<String> putMember(@Valid @RequestBody MemberParam memberParam) {
-        memberService.registerMember(memberParam);
-        return ResponseEntity.ok("success");
+    public ResponseEntity<GamemoaResponse<MemberVO>> putMember(@Valid @RequestBody MemberParam memberParam) {
+        return ResponseEntity.ok(GamemoaResponse.from(memberService.registerMember(memberParam), "회원가입에 성공하였습니다.", 200));
     }
 
 }

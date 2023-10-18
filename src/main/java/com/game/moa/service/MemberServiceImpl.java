@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void registerMember(MemberParam memberParam) {
+    public MemberVO registerMember(MemberParam memberParam) {
         String encodingPassword = passwordEncoder.encode(memberParam.getPassword());
         Set<Authority> authorities = new HashSet<>();
         Member member = new Member(memberParam.getMemberId(),
@@ -47,5 +47,10 @@ public class MemberServiceImpl implements MemberService {
                 memberParam.getEmail(),
                 encodingPassword, authorities);
         Member registerMember = memberRepository.save(member);
+        return MemberVO.builder()
+                .memberId(registerMember.getMemberId())
+                .name(registerMember.getName())
+                .email(registerMember.getEmail())
+                .build();
     }
 }

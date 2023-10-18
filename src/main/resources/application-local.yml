@@ -1,8 +1,4 @@
 spring:
-  security:
-    user:
-      name: admin
-      password: $2a$10$BU2V22ofnBJgcjfOtogOjOkWxUuSnkl3oV3BKGPfup0P3YQXuTlXq
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb;mode=MySQL;
@@ -44,3 +40,6 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui
+jwt:
+  secret: amtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFu
+  token-expiration: 86400000

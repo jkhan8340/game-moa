@@ -30,3 +30,6 @@ management:
   health:
     db:
       enabled: false
+jwt:
+  secret: amtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFu
+  token-expiration: 86400000

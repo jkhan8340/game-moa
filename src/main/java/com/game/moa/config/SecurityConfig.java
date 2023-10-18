@@ -1,6 +1,7 @@
 package com.game.moa.config;
 
 import com.game.moa.auth.JwtFilter;
+import com.game.moa.auth.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +30,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilter jwtFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, TokenProvider tokenProvider) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exceptionHandlingConfigurer) -> exceptionHandlingConfigurer
@@ -51,7 +52,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/api/login/**")).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

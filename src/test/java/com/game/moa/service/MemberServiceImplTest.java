@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 
 
 @SpringBootTest
-@TestPropertySource(value = "classpath:application-test.yml")
+@ActiveProfiles("test")
 class MemberServiceImplTest {
 
     @MockBean

@@ -1,6 +1,7 @@
 package com.game.moa.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,8 +10,13 @@ public class GamemoaResponse<T> {
 
     private static final String DEFAULT_SUCCESS_MESSAGE = "success";
 
+    @JsonProperty("message")
     private final String message;
+
+    @JsonProperty("status_code")
     private final int statusCode;
+
+    @JsonProperty("data")
     private final T data;
 
     protected GamemoaResponse (T data, String message, int statusCode) {

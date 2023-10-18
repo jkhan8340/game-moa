@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/login")
 public class LoginRestController {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
 
@@ -34,9 +33,8 @@ public class LoginRestController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication.getName(), authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
-
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(AUTHORIZATION_HEADER, "Bearer " + token);
+        httpHeaders.add(TokenProvider.AUTHORIZATION_HEADER, "Bearer " + token);
         return ResponseEntity.ok().headers(httpHeaders).body(GamemoaResponse.from(token, "success", 200));
     }
 

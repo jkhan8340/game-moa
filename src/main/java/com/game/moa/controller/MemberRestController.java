@@ -4,7 +4,6 @@ import com.game.moa.param.MemberParam;
 import com.game.moa.response.GamemoaResponse;
 import com.game.moa.service.MemberService;
 import com.game.moa.vo.MemberVO;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

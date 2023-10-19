@@ -3,6 +3,7 @@ package com.game.moa.service;
 import com.game.moa.entity.Member;
 import com.game.moa.entity.MemberAuthority;
 import com.game.moa.repository.MemberRepository;
+import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +30,13 @@ public class LoginServiceImpl implements LoginService {
                 .name(member.getName())
                 .email(member.getEmail())
                 .password(member.getPassword())
-                .authorities(member.getMemberAuthorities().stream().map(MemberAuthority::getAuthority).collect(Collectors.toSet()))
+                .authorities(member.getMemberAuthorities()
+                        .stream()
+                        .map((memberAuthority) ->
+                                AuthorityVO.builder()
+                                        .authority(memberAuthority.getAuthority().getName())
+                                        .build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
 }

@@ -1,8 +1,10 @@
 package com.game.moa.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.game.moa.auth.TokenProvider;
 import com.game.moa.param.LoginParam;
 import com.game.moa.response.GamemoaResponse;
+import com.game.moa.vo.MemberVO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +28,15 @@ public class LoginRestController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<GamemoaResponse<String>> authenticate(@Valid @RequestBody LoginParam loginParam) {
+    public ResponseEntity<GamemoaResponse<String>> authenticate(@Valid @RequestBody LoginParam loginParam) throws JsonProcessingException {
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(new UsernamePasswordAuthenticationToken(loginParam.getMemberId(), loginParam.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.createToken(authentication.getName(), authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        MemberVO memberVO = (MemberVO) authentication.getPrincipal();
+        String token = tokenProvider.createToken(memberVO);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(TokenProvider.AUTHORIZATION_HEADER, "Bearer " + token);
         return ResponseEntity.ok().headers(httpHeaders).body(GamemoaResponse.from(token, "success", 200));

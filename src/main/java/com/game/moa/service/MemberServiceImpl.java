@@ -6,6 +6,7 @@ import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.AuthorityRepository;
 import com.game.moa.repository.MemberRepository;
+import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberVO registerMember(MemberParam memberParam) {
         String encodingPassword = passwordEncoder.encode(memberParam.getPassword());
         MemberAuthority memberAuthority = new MemberAuthority();
-        memberAuthority.setAuthority(authorityRepository.findAuthorityByName("ROLE_USER"));
+        memberAuthority.setAuthority(authorityRepository.findByName("ROLE_USER"));
         Set<MemberAuthority> memberAuthorities = new HashSet<>();
         memberAuthorities.add(memberAuthority);
         Member member = new Member(memberParam.getMemberId(),
@@ -62,7 +63,13 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(registerMember.getMemberId())
                 .name(registerMember.getName())
                 .email(registerMember.getEmail())
-                .authorities(registerMember.getMemberAuthorities().stream().map(MemberAuthority::getAuthority).collect(Collectors.toSet()))
+                .authorities(member.getMemberAuthorities()
+                        .stream()
+                        .map((memberAuthorityLamDa) ->
+                                AuthorityVO.builder()
+                                        .authority(memberAuthorityLamDa.getAuthority().getName())
+                                        .build())
+                        .collect(Collectors.toSet()))
                 .build();
     }
 
@@ -73,7 +80,13 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(member.getMemberId())
                 .name(member.getName())
                 .email(member.getEmail())
-                .authorities(member.getMemberAuthorities().stream().map(MemberAuthority::getAuthority).collect(Collectors.toSet()))
+                .authorities(member.getMemberAuthorities()
+                        .stream()
+                        .map((memberAuthorityLamDa) ->
+                                AuthorityVO.builder()
+                                        .authority(memberAuthorityLamDa.getAuthority().getName())
+                                        .build())
+                        .collect(Collectors.toSet()))
                 .build()).toList();
     }
 }

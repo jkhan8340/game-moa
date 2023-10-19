@@ -1,8 +1,10 @@
 package com.game.moa.service;
 
+import com.game.moa.entity.Authority;
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
+import com.game.moa.repository.AuthorityRepository;
 import com.game.moa.repository.MemberRepository;
 import com.game.moa.util.Base64Utils;
 import com.game.moa.vo.MemberVO;
@@ -28,6 +30,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ActiveProfiles("test")
 class MemberServiceImplTest {
+
+    @MockBean
+    private AuthorityRepository authorityRepository;
 
     @MockBean
     private MemberRepository repository;
@@ -91,6 +96,7 @@ class MemberServiceImplTest {
         when(repository
                 .save(argThat((arg) -> arg.getMemberId().equals(MOCK_MEMBER.getMemberId()) && passwordEncoder.matches(PASSWORD, arg.getPassword()))))
                 .thenReturn(MOCK_MEMBER);
+        when(authorityRepository.findByName(any())).thenReturn(new Authority("ROLE_USER"));
         MemberVO memberVO = memberService.registerMember(memberParam);
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
         assertThat(memberVO.getEmail()).isEqualTo(EMAIL);

@@ -2,6 +2,7 @@ package com.game.moa.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.moa.advice.GamemoaRestControllerAdvice;
+import com.game.moa.config.JacksonConfig;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
 import com.game.moa.service.MemberService;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(
         controllers = MemberRestController.class
 )
+@Import(JacksonConfig.class)
 @ActiveProfiles("test")
 class MemberRestControllerTest {
 
@@ -77,7 +80,7 @@ class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                {"message":"success","status_code":200,"data":{"enabled":true,"username":"member","accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com"}}
+                {"message":"success","status_code":200,"data":{"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com"}}
                 """));
     }
 

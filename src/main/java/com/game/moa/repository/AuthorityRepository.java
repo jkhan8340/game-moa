@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
-    Authority findAuthorityByName(String authorityName);
+    Authority findByName(String name);
 }

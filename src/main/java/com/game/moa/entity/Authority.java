@@ -2,9 +2,11 @@ package com.game.moa.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.jackson.Jacksonized;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
@@ -14,7 +16,7 @@ import java.util.Set;
 @Setter
 @ToString
 @Table(name = "authority")
-public class Authority implements GrantedAuthority {
+public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +37,4 @@ public class Authority implements GrantedAuthority {
         this.name = name;
     }
 
-    @Override
-    public String getAuthority() {
-        return this.name;
-    }
 }

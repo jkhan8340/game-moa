@@ -39,7 +39,7 @@ springdoc:
   api-docs:
     path: /api-docs
   swagger-ui:
-    path: /swagger-ui
+    use-root-path: true
 jwt:
   secret: amtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFu
   token-expiration: 86400000

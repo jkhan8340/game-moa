@@ -1,11 +1,14 @@
 package com.game.moa.param;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Setter
+@Builder
+@Jacksonized
 public class LoginParam {
 
     @JsonProperty("member_id")

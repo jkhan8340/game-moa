@@ -8,6 +8,7 @@ import com.game.moa.repository.AuthorityRepository;
 import com.game.moa.repository.MemberRepository;
 import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,9 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    private MemberServiceImpl(MemberRepository memberRepository,
+                              @Qualifier("bCryptPasswordEncoder") PasswordEncoder passwordEncoder,
+                              AuthorityRepository authorityRepository) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;

@@ -43,10 +43,10 @@ class MemberRestControllerTest {
     @MockBean
     private MemberService memberService;
 
-    private static final ObjectMapper objectMapper;
+    private static final ObjectMapper OBJECT_MAPPER;
 
     static {
-        objectMapper = new ObjectMapper();
+        OBJECT_MAPPER = new ObjectMapper();
     }
 
     @BeforeEach
@@ -90,7 +90,7 @@ class MemberRestControllerTest {
                 .build();
         mockMvc.perform(put("/api/member")
                         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberParam)))
+                        .content(OBJECT_MAPPER.writeValueAsString(memberParam)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("""

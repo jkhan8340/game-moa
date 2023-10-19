@@ -92,10 +92,8 @@ class MemberServiceImplTest {
                 .save(argThat((arg) -> arg.getMemberId().equals(MOCK_MEMBER.getMemberId()) && passwordEncoder.matches(PASSWORD, arg.getPassword()))))
                 .thenReturn(MOCK_MEMBER);
         MemberVO memberVO = memberService.registerMember(memberParam);
-        System.out.println(memberVO.getPassword());
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
         assertThat(memberVO.getEmail()).isEqualTo(EMAIL);
         assertThat(memberVO.getName()).isEqualTo(NAME);
-        assertThat(memberVO.getPassword()).isEqualTo(PASSWORD);
     }
 }

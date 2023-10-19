@@ -31,8 +31,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = LoginRestController.class)
 class LoginRestControllerTest {
@@ -89,6 +88,7 @@ class LoginRestControllerTest {
                         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(loginParam)))
                 .andDo(print())
+                .andExpect(header().string("Authorization", "Bearer token"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                     {"message":"success","status_code":200,"data":"token"}

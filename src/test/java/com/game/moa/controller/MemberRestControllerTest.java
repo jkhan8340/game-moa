@@ -1,7 +1,9 @@
 package com.game.moa.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.moa.advice.GamemoaRestControllerAdvice;
 import com.game.moa.exception.GamemoaException;
+import com.game.moa.param.MemberParam;
 import com.game.moa.service.MemberService;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,14 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +40,12 @@ class MemberRestControllerTest {
     @MockBean
     private MemberService memberService;
 
+    private static final ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+    }
+
     @BeforeEach
     public void setUp() {
         this.mockMvc = MockMvcBuilders
@@ -45,7 +55,6 @@ class MemberRestControllerTest {
     }
 
     @Test
-    @WithMockUser
     public void testGetNotFoundMember() throws Exception {
         when(memberService.findMemberByMemberId(eq("member1"))).thenThrow(new GamemoaException(HttpStatus.NOT_FOUND, "유저 못찾음"));
         mockMvc.perform(get("/api/member?member_id=member1"))
@@ -68,7 +77,21 @@ class MemberRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                {"message":"success","status_code":200,"data":{"authorities":null,"enabled":true,"username":"member","accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com"}}
+                {"message":"success","status_code":200,"data":{"enabled":true,"username":"member","accountNonExpired":true,"credentialsNonExpired":true,"accountNonLocked":true,"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com"}}
+                """));
+    }
+
+    @Test
+    public void testValidationMember() throws Exception {
+        MemberParam memberParam = MemberParam.builder()
+                .build();
+        mockMvc.perform(put("/api/member")
+                        .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberParam)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("""
+                {"status_code":400,"data":{"password":"password는 필수입니다.","name":"name은 필수입니다.","email":"email은 필수입니다.","memberId":"member_id는 필수입니다."}}
                 """));
     }
 }

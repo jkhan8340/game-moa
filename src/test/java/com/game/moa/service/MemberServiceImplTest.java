@@ -2,6 +2,7 @@ package com.game.moa.service;
 
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
+import com.game.moa.param.MemberParam;
 import com.game.moa.repository.MemberRepository;
 import com.game.moa.util.Base64Utils;
 import com.game.moa.vo.MemberVO;
@@ -15,10 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.WeakHashMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -31,25 +33,35 @@ class MemberServiceImplTest {
     private MemberRepository repository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private MemberService memberService;
+
+    private final static String NAME = "한정기";
+    private final static String MEMBER_ID = "test";
+    private final static String EMAIL = "gkswjdrl123@naver.com";
+    private final static String PASSWORD = "1234";
+    private final static long MEMBER_SEQ = 1L;
 
     private static final Member MOCK_MEMBER;
     static {
         MOCK_MEMBER = mock(Member.class);
-        when(MOCK_MEMBER.getMemberId()).thenReturn("test");
-        when(MOCK_MEMBER.getName()).thenReturn("한정기");
-        when(MOCK_MEMBER.getEmail()).thenReturn("gkswjdrl123@naver.com");
+        when(MOCK_MEMBER.getMemberId()).thenReturn(MEMBER_ID);
+        when(MOCK_MEMBER.getName()).thenReturn(NAME);
+        when(MOCK_MEMBER.getEmail()).thenReturn(EMAIL);
+        when(MOCK_MEMBER.getMemberSeq()).thenReturn(MEMBER_SEQ);
+        when(MOCK_MEMBER.getPassword()).thenReturn(PASSWORD);
     }
 
     @Test
     public void testMemberFind() {
-        String memberId = "test";
-        when(repository.findUserByMemberId(eq(memberId))).thenReturn(MOCK_MEMBER);
-        MemberVO memberVO = memberService.findMemberByMemberId(memberId);
+        when(repository.findUserByMemberId(eq(MEMBER_ID))).thenReturn(MOCK_MEMBER);
+        MemberVO memberVO = memberService.findMemberByMemberId(MEMBER_ID);
 
-        assertThat(memberVO.getMemberId()).isEqualTo(memberId);
-        assertThat(memberVO.getName()).isEqualTo("한정기");
-        assertThat(memberVO.getEmail()).isEqualTo("gkswjdrl123@naver.com");
+        assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
+        assertThat(memberVO.getName()).isEqualTo(NAME);
+        assertThat(memberVO.getEmail()).isEqualTo(EMAIL);
     }
 
     @Test
@@ -66,5 +78,24 @@ class MemberServiceImplTest {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodingPassword = passwordEncoder.encode(password);
         assertThat(passwordEncoder.matches(password, encodingPassword)).isTrue();
+    }
+
+    @Test
+    public void testRegisterMember() {
+        MemberParam memberParam = MemberParam.builder()
+                .memberId(MEMBER_ID)
+                .password(PASSWORD)
+                .email(EMAIL)
+                .name(NAME)
+                .build();
+        when(repository
+                .save(argThat((arg) -> arg.getMemberId().equals(MOCK_MEMBER.getMemberId()) && passwordEncoder.matches(PASSWORD, arg.getPassword()))))
+                .thenReturn(MOCK_MEMBER);
+        MemberVO memberVO = memberService.registerMember(memberParam);
+        System.out.println(memberVO.getPassword());
+        assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
+        assertThat(memberVO.getEmail()).isEqualTo(EMAIL);
+        assertThat(memberVO.getName()).isEqualTo(NAME);
+        assertThat(memberVO.getPassword()).isEqualTo(PASSWORD);
     }
 }

@@ -25,7 +25,7 @@ public class GamemoaRestControllerAdvice {
         Map<String, String> errors = e.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(GamemoaErrorResponse.from(HttpStatus.BAD_REQUEST.value(), e.getMessage(), errors));
+                .body(GamemoaErrorResponse.from(HttpStatus.BAD_REQUEST.value(), null, errors));
     }
 
 }

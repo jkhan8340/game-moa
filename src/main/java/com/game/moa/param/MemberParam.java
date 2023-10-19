@@ -2,11 +2,14 @@ package com.game.moa.param;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Setter
+@Builder
+@Jacksonized
 public class MemberParam {
 
     @NotBlank(message = "member_id는 필수입니다.")

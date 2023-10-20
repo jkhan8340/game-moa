@@ -1,14 +1,8 @@
 spring:
-  profiles:
-      active: dev
-  security:
-    user:
-      name: admin
-      password: 1234
   datasource:
     driver-class-name: org.h2.Driver
-    #url: jdbc:h2:mem:testdb
-    url: jdbc:h2:~/testdb
+    url: jdbc:h2:mem:testdb;mode=MySQL;
+    #url: jdbc:h2:~/testdb
     username: sa
     password:
   h2:
@@ -25,11 +19,27 @@ spring:
         format_sql: true
         show_sql: true
         use_sql_comments: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data/*.sql
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      show-details: always
   health:
     db:
       enabled: false
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    use-root-path: true
+jwt:
+  secret: amtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFu
+  token-expiration: 86400000

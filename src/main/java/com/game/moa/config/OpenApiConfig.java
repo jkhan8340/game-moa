@@ -1,5 +1,6 @@
 package com.game.moa.config;
 
+import com.game.moa.auth.MemberInfo;
 import com.game.moa.auth.TokenProvider;
 import com.game.moa.controller.LoginRestController;
 import io.swagger.v3.oas.models.Components;
@@ -9,15 +10,18 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.utils.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPI31
 public class OpenApiConfig {
 
     @Bean
     public OpenAPI config() {
+
+        SpringDocUtils.getConfig().addAnnotationsToIgnore(MemberInfo.class);
+
         return new OpenAPI()
                 .addSecurityItem(new SecurityRequirement().addList(TokenProvider.AUTHORIZATION_HEADER))
                 .components(new Components()

@@ -1,5 +1,6 @@
 package com.game.moa.controller;
 
+import com.game.moa.auth.MemberInfo;
 import com.game.moa.param.MemberParam;
 import com.game.moa.response.GamemoaResponse;
 import com.game.moa.service.MemberService;
@@ -22,10 +23,9 @@ public class MemberRestController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<GamemoaResponse<MemberVO>> getMember(@RequestParam("member_id") String memberId) {
+    public ResponseEntity<GamemoaResponse<MemberVO>> getMember(@MemberInfo MemberVO memberVO) {
         return ResponseEntity
-                .ok(GamemoaResponse.from(memberService.findMemberByMemberId(memberId), "success", 200));
+                .ok(GamemoaResponse.from(memberService.findMemberByMemberId(memberVO.getMemberId()), "success", 200));
     }
 
     @PutMapping

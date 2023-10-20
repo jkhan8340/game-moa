@@ -1,6 +1,5 @@
 package com.game.moa.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.moa.advice.GamemoaRestControllerAdvice;
 import com.game.moa.auth.MemberVOArgumentResolver;
 import com.game.moa.config.JacksonConfig;
@@ -27,9 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(
-        controllers = MemberRestController.class
-)
+@WebMvcTest(controllers = MemberRestController.class)
 @Import({JacksonConfig.class})
 @ActiveProfiles("test")
 class MemberRestControllerTest {

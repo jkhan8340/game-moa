@@ -5,6 +5,8 @@ import com.game.moa.entity.Member;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.MemberRepository;
 import com.game.moa.service.MemberService;
+import com.game.moa.vo.AuthorityVO;
+import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Set;
+
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -83,6 +88,35 @@ class MemberRestControllerValidationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json("""
                 {"message":"success","status_code":400,"data":{"password":"비밀번호가 일치하지 않습니다.","email":"must be a well-formed email address","memberId":"이미 존재하는 ID 입니다."}}
+                """));
+    }
+
+    @Test
+    public void testPutMember() throws Exception {
+        String memberId = "member";
+        MemberVO memberVO = MemberVO.builder()
+                .memberId(memberId)
+                .name("한정기")
+                .email("gkswjdrl123@naver.com")
+                .authorities(Set.of(AuthorityVO
+                        .builder()
+                                .authority("ROLE_USER")
+                        .build())).build();
+        MemberParam memberParam = MemberParam.builder()
+                .memberId(memberId)
+                .name("한정기")
+                .email("gkswjdrl123@naver.com")
+                .passwordConfirm("1234")
+                .password("1234")
+                .build();
+        when(memberService.registerMember(argThat((param) -> param.getMemberId().equals(memberId)))).thenReturn(memberVO);
+        mockMvc.perform(put("/api/member")
+                        .content(OBJECT_MAPPER.writeValueAsString(memberParam))
+                        .header(CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                {"message":"회원가입에 성공하였습니다.","status_code":200,"data":{"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com","authorities":[{"authority":"ROLE_USER"}]}}
                 """));
     }
 }

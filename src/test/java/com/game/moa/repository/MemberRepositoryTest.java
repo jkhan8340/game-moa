@@ -1,6 +1,7 @@
 package com.game.moa.repository;
 
 import com.game.moa.entity.Member;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Log4j2
 class MemberRepositoryTest {
 
     @Autowired
@@ -40,6 +42,10 @@ class MemberRepositoryTest {
         assertThat(findMember.getPassword()).isEqualTo("1234");
         assertThat(findMember.getEmail()).isEqualTo("gkswjdrl123@naver.com");
         assertThat(findMember.getMemberSeq()).isEqualTo(1L);
+        assertThat(findMember.getCreated()).isEqualTo("-999999999-01-01T00:00");
+        assertThat(findMember.getUpdated()).isEqualTo("-999999999-01-01T00:00");
+        assertThat(findMember.isEnabled()).isTrue();
+        log.info("find member :" + findMember);
     }
 
     @Test

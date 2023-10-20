@@ -7,6 +7,7 @@ import com.game.moa.util.Base64Utils;
 import com.game.moa.vo.MemberVO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@Log4j2
 @Component
 public class HmacShaWithTokenProvider implements TokenProvider {
 
@@ -67,7 +69,7 @@ public class HmacShaWithTokenProvider implements TokenProvider {
                     .parseClaimsJws(authToken);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            log.debug(e.getMessage());
         }
         return false;
     }

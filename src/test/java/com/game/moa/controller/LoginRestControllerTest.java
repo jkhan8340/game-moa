@@ -86,7 +86,7 @@ class LoginRestControllerTest {
                         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(loginParam)))
                 .andDo(print())
-                .andExpect(header().string("Authorization", "Bearer token"))
+                .andExpect(header().string("Authorization", TokenProvider.TOKEN_TYPE + "token"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                     {"message":"success","status_code":200,"data":"token"}

@@ -39,7 +39,7 @@ public class LoginRestController {
         String token = tokenProvider.createToken(memberVO);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(TokenProvider.AUTHORIZATION_HEADER, "Bearer " + token);
+        httpHeaders.add(TokenProvider.AUTHORIZATION_HEADER, TokenProvider.TOKEN_TYPE + token);
         return ResponseEntity.ok().headers(httpHeaders).body(GamemoaResponse.from(token, "success", 200));
     }
 

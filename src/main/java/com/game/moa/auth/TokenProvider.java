@@ -10,6 +10,8 @@ public interface TokenProvider {
 
     String AUTHORIZATION_HEADER = "Authorization";
 
+    String TOKEN_TYPE = "Bearer ";
+
     String createToken(MemberVO memberVO) throws JsonProcessingException;
 
     Authentication getAuthentication(String token) throws JsonProcessingException;

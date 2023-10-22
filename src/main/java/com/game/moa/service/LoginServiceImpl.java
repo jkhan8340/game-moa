@@ -1,8 +1,7 @@
 package com.game.moa.service;
 
 import com.game.moa.entity.Member;
-import com.game.moa.entity.MemberAuthority;
-import com.game.moa.repository.MemberRepository;
+import com.game.moa.repository.jpa.MemberRepository;
 import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.springframework.security.core.userdetails.UserDetails;

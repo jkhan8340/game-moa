@@ -1,29 +1,26 @@
 package com.game.moa.service;
 
 import com.game.moa.entity.Member;
-import com.game.moa.repository.MemberRepository;
+import com.game.moa.repository.jpa.MemberRepository;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@ActiveProfiles("test")
 class LoginServiceImplTest {
 
-    @Autowired
-    private LoginService loginService;
+    private static final LoginService LOGIN_SERVICE;
 
-    @MockBean
-    private MemberRepository memberRepository;
+    private static final MemberRepository MEMBER_REPOSITORY;
+
+    static {
+        MEMBER_REPOSITORY = mock(MemberRepository.class);
+        LOGIN_SERVICE = new LoginServiceImpl(MEMBER_REPOSITORY);
+    }
 
     private final static String NAME = "한정기";
     private final static String MEMBER_ID = "test";
@@ -39,8 +36,8 @@ class LoginServiceImplTest {
 
     @Test
     public void testLoadUserByUsername() {
-        when(memberRepository.findUserByMemberId(eq(MEMBER_ID))).thenReturn(MOCK_MEMBER);
-        UserDetails userDetails = loginService.loadUserByUsername(MEMBER_ID);
+        when(MEMBER_REPOSITORY.findUserByMemberId(eq(MEMBER_ID))).thenReturn(MOCK_MEMBER);
+        UserDetails userDetails = LOGIN_SERVICE.loadUserByUsername(MEMBER_ID);
         assertThat(userDetails.getUsername()).isEqualTo(MEMBER_ID);
         MemberVO memberVO = (MemberVO) userDetails;
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);

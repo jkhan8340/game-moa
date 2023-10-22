@@ -20,15 +20,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @Log4j2
-@SpringBootTest
-@ActiveProfiles("test")
 class MemberVOArgumentResolverTest {
 
-    @Autowired
-    private MemberVOArgumentResolver memberVOArgumentResolver;
+    private static final MemberVOArgumentResolver MEMBER_VO_ARGUMENT_RESOLVER;
     private final static MethodParameter METHOD_PARAMETER;
     static {
         METHOD_PARAMETER = mock(MethodParameter.class);
+        MEMBER_VO_ARGUMENT_RESOLVER = new MemberVOArgumentResolver();
     }
 
     @Test
@@ -36,10 +34,10 @@ class MemberVOArgumentResolverTest {
         when(METHOD_PARAMETER.getParameterAnnotation(eq(MemberInfo.class))).thenReturn(mock(MemberInfo.class));
         Class<?> mockClass = MemberVO.class;
         when(METHOD_PARAMETER.getParameterType()).thenAnswer((invocation) -> mockClass);
-        assertThat(memberVOArgumentResolver.supportsParameter(METHOD_PARAMETER)).isTrue();
+        assertThat(MEMBER_VO_ARGUMENT_RESOLVER.supportsParameter(METHOD_PARAMETER)).isTrue();
 
         when(METHOD_PARAMETER.getParameterAnnotation(any())).thenReturn(null);
-        assertThat(memberVOArgumentResolver.supportsParameter(METHOD_PARAMETER)).isFalse();
+        assertThat(MEMBER_VO_ARGUMENT_RESOLVER.supportsParameter(METHOD_PARAMETER)).isFalse();
     }
 
     @Test
@@ -53,17 +51,9 @@ class MemberVOArgumentResolverTest {
         SecurityContext securityContext = mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        MemberVO memberVO = (MemberVO) memberVOArgumentResolver.resolveArgument(mock(), mock(), mock(), mock());
+        MemberVO memberVO = (MemberVO) MEMBER_VO_ARGUMENT_RESOLVER.resolveArgument(mock(), mock(), mock(), mock());
         assertThat(memberVO.getMemberId()).isEqualTo(memberId);
         log.info("find member : " + memberVO);
-    }
-
-    @TestConfiguration
-    static class TestMemberVOArgumentResolverConfiguration {
-        @Bean
-        public MemberVOArgumentResolver memberVOArgumentResolver() {
-            return new MemberVOArgumentResolver();
-        }
     }
 
 }

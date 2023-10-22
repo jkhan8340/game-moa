@@ -4,21 +4,17 @@ import com.game.moa.entity.Authority;
 import com.game.moa.entity.Member;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
-import com.game.moa.repository.AuthorityRepository;
-import com.game.moa.repository.MemberRepository;
-import com.game.moa.util.Base64Utils;
+import com.game.moa.repository.jpa.AuthorityRepository;
+import com.game.moa.repository.jpa.MemberRepository;
 import com.game.moa.vo.MemberVO;
-import org.apache.logging.log4j.util.Base64Util;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-
-import java.util.WeakHashMap;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,22 +22,22 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
-@SpringBootTest
-@ActiveProfiles("test")
 class MemberServiceImplTest {
 
-    @MockBean
-    private AuthorityRepository authorityRepository;
+    private static final AuthorityRepository AUTHORITY_REPOSITORY;
 
-    @MockBean
-    private MemberRepository repository;
+    private static final MemberRepository REPOSITORY;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private static final PasswordEncoder PASSWORD_ENCODER;
 
-    @Autowired
-    private MemberService memberService;
+    private static final MemberService MEMBER_SERVICE;
+
+    static {
+        AUTHORITY_REPOSITORY = mock(AuthorityRepository.class);
+        REPOSITORY = mock(MemberRepository.class);
+        PASSWORD_ENCODER = new BCryptPasswordEncoder();
+        MEMBER_SERVICE = new MemberServiceImpl(REPOSITORY,  PASSWORD_ENCODER, AUTHORITY_REPOSITORY);
+    }
 
     private final static String NAME = "한정기";
     private final static String MEMBER_ID = "test";
@@ -61,8 +57,8 @@ class MemberServiceImplTest {
 
     @Test
     public void testMemberFind() {
-        when(repository.findUserByMemberId(eq(MEMBER_ID))).thenReturn(MOCK_MEMBER);
-        MemberVO memberVO = memberService.findMemberByMemberId(MEMBER_ID);
+        when(REPOSITORY.findUserByMemberId(eq(MEMBER_ID))).thenReturn(MOCK_MEMBER);
+        MemberVO memberVO = MEMBER_SERVICE.findMemberByMemberId(MEMBER_ID);
 
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
         assertThat(memberVO.getName()).isEqualTo(NAME);
@@ -71,8 +67,8 @@ class MemberServiceImplTest {
 
     @Test
     public void testNotFoundMember() {
-        when(repository.findUserByMemberId(any())).thenReturn(null);
-        assertThatThrownBy(() -> memberService.findMemberByMemberId("test"))
+        when(REPOSITORY.findUserByMemberId(any())).thenReturn(null);
+        assertThatThrownBy(() -> MEMBER_SERVICE.findMemberByMemberId("test"))
                 .isInstanceOf(GamemoaException.class)
                 .hasMessage("존재하지 않는 회원입니다.");
     }
@@ -93,13 +89,14 @@ class MemberServiceImplTest {
                 .email(EMAIL)
                 .name(NAME)
                 .build();
-        when(repository
-                .save(argThat((arg) -> arg.getMemberId().equals(MOCK_MEMBER.getMemberId()) && passwordEncoder.matches(PASSWORD, arg.getPassword()))))
+        when(REPOSITORY
+                .save(argThat((arg) -> arg.getMemberId().equals(MOCK_MEMBER.getMemberId()) && PASSWORD_ENCODER.matches(PASSWORD, arg.getPassword()))))
                 .thenReturn(MOCK_MEMBER);
-        when(authorityRepository.findByName(any())).thenReturn(new Authority("ROLE_USER"));
-        MemberVO memberVO = memberService.registerMember(memberParam);
+        when(AUTHORITY_REPOSITORY.findByName(any())).thenReturn(new Authority("ROLE_USER"));
+        MemberVO memberVO = MEMBER_SERVICE.registerMember(memberParam);
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
         assertThat(memberVO.getEmail()).isEqualTo(EMAIL);
         assertThat(memberVO.getName()).isEqualTo(NAME);
     }
+
 }

@@ -11,20 +11,16 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Log4j2
 @Component
 public class HmacShaWithTokenProvider implements TokenProvider {
 
-    private final long expirationMilliseconds;
+    private final long expirationMicroseconds;
     private static final String CLAIM_KEY = "MEMBER";
 
     private final Key key;
@@ -36,7 +32,7 @@ public class HmacShaWithTokenProvider implements TokenProvider {
     }
 
     public HmacShaWithTokenProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.token-expiration}") long expiration) {
-        this.expirationMilliseconds = expiration * 1000;
+        this.expirationMicroseconds = expiration * 1000;
         this.key = Keys.hmacShaKeyFor(Base64Utils.decodedString(secret).getBytes());
     }
 
@@ -45,7 +41,7 @@ public class HmacShaWithTokenProvider implements TokenProvider {
         return Jwts.builder()
                 .setSubject(memberVO.getMemberId())
                 .claim(CLAIM_KEY, OBJECT_MAPPER.writeValueAsString(memberVO))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMilliseconds))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMicroseconds))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }

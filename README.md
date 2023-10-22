@@ -25,7 +25,10 @@ Just for me project (2023.10.13 ~ ing)
   - GitHub을 쓰니, GitHub Action으로 한번 go!
 - `CD, AWS CodeDeploy`
   - AWS ec2로 운영할꺼니깐 간편하게 쓰기위해 go!
-
+- `redis`
+  - M1, M2 관련해서 임베디드 레디스 지원안한다. 그래서.. 직접설치하고 빌드해서 바이너리를 넣는 과정이 필요한데 난 레디스 빌드도안된다.
+  - 그래서 확인해보니 MacOS 13.5.2 관련 최근에 나와 같은 유형의 문제가 있어 패지가 이루어 졌다. 참고) https://github.com/redis/redis/issues/12585
+  - 결론 패치된 이후 버전 사용
 # API 접속
 ****
 [GAME-MOA-API](http://ec2-52-79-151-30.ap-northeast-2.compute.amazonaws.com)

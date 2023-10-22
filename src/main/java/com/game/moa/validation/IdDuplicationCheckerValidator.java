@@ -1,6 +1,6 @@
 package com.game.moa.validation;
 
-import com.game.moa.repository.MemberRepository;
+import com.game.moa.repository.jpa.MemberRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

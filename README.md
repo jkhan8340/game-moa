@@ -41,4 +41,6 @@ Just for me project (2023.10.13 ~ ing)
     - 디아블로 캐릭터 랭킹검색 및 캐릭터 검색기능 
   - 문의하기
 
-    
+# TODO
+- 이중화, 무중단 배포
+  - health check하는 방식으로 shell

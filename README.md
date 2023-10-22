@@ -29,6 +29,7 @@ Just for me project (2023.10.13 ~ ing)
 # API 접속
 ****
 [GAME-MOA-API](http://ec2-52-79-151-30.ap-northeast-2.compute.amazonaws.com)
+- 계정: admin / 1234 
 
 # 기능
 ****

@@ -2,6 +2,7 @@ package com.game.moa.service;
 
 import com.game.moa.entity.Authority;
 import com.game.moa.entity.Member;
+import com.game.moa.entity.MemberAuthority;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.jpa.AuthorityRepository;
@@ -15,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,6 +57,10 @@ class MemberServiceImplTest {
         when(MOCK_MEMBER.getEmail()).thenReturn(EMAIL);
         when(MOCK_MEMBER.getMemberSeq()).thenReturn(MEMBER_SEQ);
         when(MOCK_MEMBER.getPassword()).thenReturn(PASSWORD);
+        MemberAuthority memberAuthority = new MemberAuthority();
+        memberAuthority.setAuthority(new Authority("ROLE_USER"));
+        Set<MemberAuthority> memberAuthorities = Set.of(memberAuthority);
+        when(MOCK_MEMBER.getMemberAuthorities()).thenReturn(memberAuthorities);
     }
 
     @Test
@@ -97,6 +105,18 @@ class MemberServiceImplTest {
         assertThat(memberVO.getMemberId()).isEqualTo(MEMBER_ID);
         assertThat(memberVO.getEmail()).isEqualTo(EMAIL);
         assertThat(memberVO.getName()).isEqualTo(NAME);
+    }
+
+    @Test
+    public void testGetMemberList() {
+        when(REPOSITORY.findAllMemberForAuthorities()).thenReturn(List.of(MOCK_MEMBER));
+        List<MemberVO> memberVOList = MEMBER_SERVICE.getMemberList();
+        assertThat(memberVOList.size()).isEqualTo(1);
+        assertThat(memberVOList.get(0).getMemberId()).isEqualTo(MEMBER_ID);
+        assertThat(memberVOList.get(0).getEmail()).isEqualTo(EMAIL);
+        assertThat(memberVOList.get(0).getName()).isEqualTo(NAME);
+        assertThat(memberVOList.get(0).getAuthorities().size()).isEqualTo(1);
+        assertThat(memberVOList.get(0).getAuthorities().iterator().next().getAuthority()).isEqualTo("ROLE_USER");
     }
 
 }

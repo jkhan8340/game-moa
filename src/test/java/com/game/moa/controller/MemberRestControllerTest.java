@@ -5,6 +5,7 @@ import com.game.moa.auth.MemberVOArgumentResolver;
 import com.game.moa.config.JacksonConfig;
 import com.game.moa.exception.GamemoaException;
 import com.game.moa.service.MemberService;
+import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -41,6 +45,19 @@ class MemberRestControllerTest {
 
     private static final MemberVOArgumentResolver MOCK_CUSTOM_ARGUMENT_RESOLVER = mock(MemberVOArgumentResolver.class);
 
+    private static final MemberVO MOCK_MEMBER_VO;
+
+    static {
+        MOCK_MEMBER_VO = MemberVO.builder()
+                .memberId("member")
+                .name("한정기")
+                .email("gkswjdrl123@naver.com")
+                .authorities(Set.of(AuthorityVO.builder()
+                                .authority("ROLE_USER")
+                        .build()))
+                .build();
+    }
+
     @BeforeEach
     public void setUp() {
         this.mockMvc = MockMvcBuilders
@@ -64,19 +81,25 @@ class MemberRestControllerTest {
 
     @Test
     public void testGetMember() throws Exception {
-
-        MemberVO memberVO = MemberVO.builder()
-                .memberId("member")
-                .name("한정기")
-                .email("gkswjdrl123@naver.com").build();
-        when(MOCK_CUSTOM_ARGUMENT_RESOLVER.resolveArgument(any(), any(), any() ,any())).thenReturn(memberVO);
+        when(MOCK_CUSTOM_ARGUMENT_RESOLVER.resolveArgument(any(), any(), any() ,any())).thenReturn(MOCK_MEMBER_VO);
         when(MOCK_CUSTOM_ARGUMENT_RESOLVER.supportsParameter(any())).thenReturn(true);
-        when(memberService.findMemberByMemberId(eq("member"))).thenReturn(memberVO);
+        when(memberService.findMemberByMemberId(eq("member"))).thenReturn(MOCK_MEMBER_VO);
         mockMvc.perform(get("/api/member"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
-                {"message":"success","status_code":200,"data":{"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com"}}
+                {"message":"success","status_code":200,"data":{"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com","authorities":[{"authority":"ROLE_USER"}]}}
+                """));
+    }
+
+    @Test
+    public void testGetMemberList() throws Exception {
+        when(memberService.getMemberList()).thenReturn(List.of(MOCK_MEMBER_VO));
+        mockMvc.perform(get("/api/member/list"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("""
+                {"message":"success","status_code":200,"data":[{"member_id":"member","name":"한정기","email":"gkswjdrl123@naver.com","authorities":[{"authority":"ROLE_USER"}]}]}
                 """));
     }
 }

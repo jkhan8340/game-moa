@@ -21,22 +21,33 @@ public class EmbeddedRedisServerConfig {
 
     private RedisServer redisServer;
 
+    private final static File REDIS_SERVER_FOR_ARM;
+
+    private final static boolean IS_ARM =  System.getProperty("os.arch").contains("aarch64");
+
+    static {
+        try {
+            REDIS_SERVER_FOR_ARM = new ClassPathResource("redis/redis-server-7.2.2-mac-arm64").getFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public EmbeddedRedisServerConfig(@Value("${spring.data.redis.port}") int port) {
         this.port = port;
     }
 
     @PostConstruct
-    public void startServer() throws IOException {
-        if (isArmArchitecture()) {
-            redisServer = new RedisServer(getMacSupportRedis(), port);
+    public void startServer() {
+        if (IS_ARM) {
+            redisServer = new RedisServer(REDIS_SERVER_FOR_ARM, port);
         } else {
             redisServer = RedisServer.builder()
                     .port(port)
-                    .setting("maxmemory 128M")
                     .build();
         }
         redisServer.start();
-        log.info("local Redis Started! port : " + redisServer.ports());
+        log.info("Local Redis Started! port : " + redisServer.ports());
     }
 
     @PreDestroy
@@ -45,12 +56,4 @@ public class EmbeddedRedisServerConfig {
         log.info("local Redis stop!");
     }
 
-    private boolean isArmArchitecture() {
-        return System.getProperty("os.arch").contains("aarch64");
-    }
-
-
-    private File getMacSupportRedis() throws IOException {
-        return new ClassPathResource("redis/redis-server-7.2.2-mac-arm64").getFile();
-    }
 }

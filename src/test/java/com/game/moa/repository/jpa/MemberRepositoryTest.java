@@ -1,6 +1,6 @@
-package com.game.moa.repository;
+package com.game.moa.repository.jpa;
 
-import com.game.moa.config.redis.RedisConfig;
+import com.game.moa.config.JpaConfig;
 import com.game.moa.entity.Member;
 import com.game.moa.repository.jpa.MemberRepository;
 import lombok.extern.log4j.Log4j2;
@@ -20,6 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import(JpaConfig.class)
 @ActiveProfiles("test")
 @Log4j2
 class MemberRepositoryTest {

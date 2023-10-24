@@ -29,6 +29,8 @@ public class EmbeddedRedisServerConfig {
         try {
             if (IS_ARM) {
                 REDIS_SERVER_FOR_ARM = new ClassPathResource("redis/redis-server-7.2.2-mac-arm64").getFile();
+            } else {
+                REDIS_SERVER_FOR_ARM = null;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -41,7 +43,7 @@ public class EmbeddedRedisServerConfig {
 
     @PostConstruct
     public void startServer() {
-        if (IS_ARM) {
+        if (REDIS_SERVER_FOR_ARM != null) {
             redisServer = new RedisServer(REDIS_SERVER_FOR_ARM, port);
         } else {
             redisServer = RedisServer.builder()

@@ -27,7 +27,9 @@ public class EmbeddedRedisServerConfig {
 
     static {
         try {
-            REDIS_SERVER_FOR_ARM = new ClassPathResource("redis/redis-server-7.2.2-mac-arm64").getFile();
+            if (IS_ARM) {
+                REDIS_SERVER_FOR_ARM = new ClassPathResource("redis/redis-server-7.2.2-mac-arm64").getFile();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

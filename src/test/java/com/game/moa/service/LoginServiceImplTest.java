@@ -4,6 +4,8 @@ import com.game.moa.entity.Authority;
 import com.game.moa.entity.Member;
 import com.game.moa.entity.MemberAuthority;
 import com.game.moa.repository.jpa.MemberRepository;
+import com.game.moa.service.login.LoginService;
+import com.game.moa.service.login.LoginServiceImpl;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UserDetails;

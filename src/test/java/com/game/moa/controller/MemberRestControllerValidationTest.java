@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.moa.entity.Member;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.jpa.MemberRepository;
-import com.game.moa.service.MemberService;
+import com.game.moa.service.member.MemberService;
 import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;

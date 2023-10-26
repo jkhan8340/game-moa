@@ -3,7 +3,7 @@ package com.game.moa.controller;
 import com.game.moa.auth.MemberInfo;
 import com.game.moa.param.MemberParam;
 import com.game.moa.response.GamemoaResponse;
-import com.game.moa.service.MemberService;
+import com.game.moa.service.member.MemberService;
 import com.game.moa.vo.MemberVO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

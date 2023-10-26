@@ -7,15 +7,12 @@ import com.game.moa.exception.GamemoaException;
 import com.game.moa.param.MemberParam;
 import com.game.moa.repository.jpa.AuthorityRepository;
 import com.game.moa.repository.jpa.MemberRepository;
+import com.game.moa.service.member.MemberService;
+import com.game.moa.service.member.MemberServiceImpl;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Set;

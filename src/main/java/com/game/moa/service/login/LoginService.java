@@ -1,4 +1,4 @@
-package com.game.moa.service;
+package com.game.moa.service.login;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

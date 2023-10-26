@@ -4,7 +4,7 @@ import com.game.moa.advice.GamemoaRestControllerAdvice;
 import com.game.moa.auth.MemberVOArgumentResolver;
 import com.game.moa.config.JacksonConfig;
 import com.game.moa.exception.GamemoaException;
-import com.game.moa.service.MemberService;
+import com.game.moa.service.member.MemberService;
 import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
 import org.junit.jupiter.api.BeforeEach;

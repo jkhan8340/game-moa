@@ -1,4 +1,4 @@
-package com.game.moa.service;
+package com.game.moa.service.member;
 
 import com.game.moa.entity.Member;
 import com.game.moa.entity.MemberAuthority;

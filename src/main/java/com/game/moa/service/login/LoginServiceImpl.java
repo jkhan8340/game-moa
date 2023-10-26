@@ -1,4 +1,4 @@
-package com.game.moa.service;
+package com.game.moa.service.login;
 
 import com.game.moa.entity.Member;
 import com.game.moa.repository.jpa.MemberRepository;

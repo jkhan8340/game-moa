@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 
 public class TokenHelper {
 
-    protected static String resolveToken(HttpServletRequest request) {
+    public static String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(TokenProvider.AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TokenProvider.TOKEN_TYPE)) {
             return bearerToken.substring(7);

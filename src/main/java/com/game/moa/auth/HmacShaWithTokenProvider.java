@@ -38,11 +38,18 @@ public class HmacShaWithTokenProvider implements TokenProvider {
 
     @Override
     public String createToken(MemberVO memberVO) throws JsonProcessingException {
-        return Jwts.builder()
+        return this.createToken(memberVO, expirationMicroseconds);
+    }
+
+    @Override
+    public String createToken(MemberVO memberVO, long tokenExpiration) throws JsonProcessingException {
+        JwtBuilder builder = Jwts.builder()
                 .setSubject(memberVO.getMemberId())
-                .claim(CLAIM_KEY, OBJECT_MAPPER.writeValueAsString(memberVO))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMicroseconds))
-                .signWith(key, SignatureAlgorithm.HS512)
+                .claim(CLAIM_KEY, OBJECT_MAPPER.writeValueAsString(memberVO));
+        if (tokenExpiration > UNLIMITED_EXPIRATION) {
+            builder.setExpiration(new Date(System.currentTimeMillis() + tokenExpiration));
+        }
+        return builder.signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 

@@ -3,6 +3,7 @@ package com.game.moa.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game.moa.advice.GamemoaRestControllerAdvice;
 import com.game.moa.auth.TokenProvider;
+import com.game.moa.auth.TokenService;
 import com.game.moa.param.LoginParam;
 import com.game.moa.vo.AuthorityVO;
 import com.game.moa.vo.MemberVO;
@@ -31,11 +32,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = LoginRestController.class)
-class LoginRestControllerTest {
+@WebMvcTest(controllers = AuthRestController.class)
+class AuthRestControllerTest {
 
     @Autowired
-    private LoginRestController loginRestController;
+    private AuthRestController authRestController;
 
     @Autowired
     @Qualifier("bCryptPasswordEncoder")
@@ -43,6 +44,9 @@ class LoginRestControllerTest {
 
     @MockBean
     private TokenProvider tokenProvider;
+
+    @MockBean
+    private TokenService tokenService;
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -61,7 +65,7 @@ class LoginRestControllerTest {
     @BeforeEach
     public void setUp() {
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(this.loginRestController)
+                .standaloneSetup(this.authRestController)
                 .setControllerAdvice(new GamemoaRestControllerAdvice())
                 .build();
     }
@@ -82,7 +86,7 @@ class LoginRestControllerTest {
                 .memberId("gkswjdrl123")
                 .password("1234")
                 .build();
-        mockMvc.perform(post("/api/login/authenticate")
+        mockMvc.perform(post("/api/authenticate/login")
                         .header(CONTENT_TYPE, MediaType.APPLICATION_JSON)
                         .content(OBJECT_MAPPER.writeValueAsString(loginParam)))
                 .andDo(print())

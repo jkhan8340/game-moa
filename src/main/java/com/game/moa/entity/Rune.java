@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "rune")
@@ -42,7 +42,7 @@ public class Rune {
     private boolean enabled = true;
 
     @OneToMany(mappedBy = "rune", cascade = CascadeType.PERSIST)
-    private Set<RuneOption> runeOptions;
+    private List<RuneOption> runeOptions;
 
 }
 

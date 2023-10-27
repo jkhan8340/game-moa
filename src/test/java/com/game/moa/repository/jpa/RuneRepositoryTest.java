@@ -25,7 +25,7 @@ public class RuneRepositoryTest {
     @Test
     public void testFindAllByEnabledOrderByNumberAsc() {
         List<Rune> runeList = runeRepository.findDistinctByEnabledOrderByNumberAsc(true);
-        assertThat(runeList.size()).isEqualTo(4);
+        assertThat(runeList.size()).isEqualTo(33);
         Rune rune = runeList.get(0);
         assertThat(rune.getRuneSeq()).isEqualTo(1L);
         assertThat(rune.getNumber()).isEqualTo(1);
@@ -38,7 +38,6 @@ public class RuneRepositoryTest {
 
         runeOptions.stream()
                 .findFirst()
-                //.min(Comparator.comparing(RuneOption::getRuneOptionSeq))
                 .ifPresent((runeOption) -> {
                     assertThat(runeOption.getRuneOptionSeq()).isEqualTo(1L);
                     assertThat(runeOption.getAbility()).isEqualTo("+50 공격 등급, +1 시야");

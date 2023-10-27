@@ -1,11 +1,14 @@
 package com.game.moa.entity;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 @Getter
 @Setter
@@ -55,7 +58,7 @@ public class RuneOption {
 
         public static class Serializer extends JsonSerializer<ItemType> {
             @Override
-            public void serialize(ItemType value, com.fasterxml.jackson.core.JsonGenerator gen, com.fasterxml.jackson.databind.SerializerProvider provider) throws java.io.IOException {
+            public void serialize(ItemType value, JsonGenerator gen, SerializerProvider provider) throws IOException {
                 gen.writeString(value.getTitle());
             }
         }

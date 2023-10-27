@@ -1,6 +1,6 @@
 package com.game.moa.response;
 
-public class GamemoaErrorResponse<T> extends GamemoaResponse<T> {
+public final class GamemoaErrorResponse<T> extends GamemoaResponse<T> {
 
     private GamemoaErrorResponse(String message, int code, T errorData) {
         super(errorData, message, code);

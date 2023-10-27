@@ -19,7 +19,7 @@ public class RuneServiceImpl implements RuneService {
 
     @Override
     public List<RuneVO> getRuneList() {
-        return runeRepository.findByEnabledOrderByNumberAsc(true)
+        return runeRepository.findDistinctByEnabledOrderByNumberAsc(true)
                 .stream()
                 .map(rune -> RuneVO.builder()
                         .level(rune.getLevel())

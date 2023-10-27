@@ -11,6 +11,6 @@ public interface RuneRepository extends JpaRepository<Rune, Long> {
 
     @EntityGraph(attributePaths = {"runeOptions"}, type = EntityGraph.EntityGraphType.FETCH)
     @OrderBy(clause = "number asc")
-    List<Rune> findByEnabledOrderByNumberAsc(boolean enabled);
+    List<Rune> findDistinctByEnabledOrderByNumberAsc(boolean enabled);
 
 }

@@ -49,4 +49,4 @@ springdoc:
     use-root-path: true
 jwt:
   secret: amtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFuamtoYW5qa2hhbmpraGFu
-  token-expiration: 86400000
+  token-expiration: 1800000

@@ -1,14 +1,23 @@
 package com.game.moa.config;
 
 import com.game.moa.auth.JwtFilter;
+import com.game.moa.auth.TokenHelper;
 import com.game.moa.auth.TokenProvider;
+import com.game.moa.auth.TokenService;
+import com.game.moa.exception.GamemoaException;
+import com.game.moa.repository.redis.TokenRepository;
+import com.game.moa.vo.RefreshToken;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -30,7 +39,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, TokenProvider tokenProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, TokenProvider tokenProvider, TokenRepository tokenRepository) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling((exceptionHandlingConfigurer) -> exceptionHandlingConfigurer
@@ -50,9 +59,9 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api-docs/**"),
                                 new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/"),
-                                new AntPathRequestMatcher("/api/login/**")).permitAll()
+                                new AntPathRequestMatcher("/api/authenticate/**")).permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(tokenProvider, tokenRepository), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

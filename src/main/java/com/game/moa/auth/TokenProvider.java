@@ -12,7 +12,11 @@ public interface TokenProvider {
 
     String TOKEN_TYPE = "Bearer ";
 
+    long UNLIMITED_EXPIRATION = -1;
+
     String createToken(MemberVO memberVO) throws JsonProcessingException;
+
+    String createToken(MemberVO memberVO, long tokenExpiration) throws JsonProcessingException;
 
     Authentication getAuthentication(String token) throws JsonProcessingException;
 
